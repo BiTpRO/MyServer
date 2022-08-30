@@ -39,6 +39,7 @@
 #include "ScriptMgr.h"
 #include "SpellAuraEffects.h"
 #include "Util.h"
+#include "SocialMgr.h"
 #ifdef ELUNA
 #include "LuaEngine.h"
 #endif
@@ -436,7 +437,49 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
         }
         case CHAT_MSG_OFFICER:
         {
-            if (GetPlayer()->GetGuildId())
+            if (sWorld->getBoolConfig(CONFIG_CUSTOM_CHAT_ENABLE)) {
+                std::string Name = sWorld->GetCustomChatName();
+                std::string NameColor = sWorld->GetCustomChatNameColor();
+                std::string PlayerColor = sWorld->GetCustomChatPlayerColor();
+                std::string AllianceColor = sWorld->GetCustomChatAllianceColor();
+                std::string HordeColor = sWorld->GetCustomChatHordeColor();
+                // Faction Color
+                std::string teamColor;
+                if (sender->GetTeam() == ALLIANCE)
+                    teamColor = "|cff" + AllianceColor;
+                else
+                    teamColor = "|cff" + HordeColor;
+                // Gm Badge
+                std::string gmBadge;
+                if (sender->isGMChat() && sender->GetSession()->GetSecurity() >= 1)
+                    gmBadge = "|TINTERFACE/CHATFRAME/UI-CHATICON-BLIZZ:12:22:0:-2|t";
+                else
+                    gmBadge = "";
+                // ItemLinkFix
+                std::string temp = msg;
+                std::string temp2 = "|r";
+                size_t pos = 0;
+                while ((pos = temp.find(temp2, pos)) != std::string::npos)
+                {
+                    temp.replace(pos, temp2.length(), teamColor);
+                    pos += teamColor.length();
+                }
+                // Player Link
+                std::string playerLnk = sender->GetSession() ? "|cff" + PlayerColor + "|Hplayer:" + sender->GetName() + "|h[" + sender->GetName() + "]:|h|r" : sender->GetName();
+                //Lets Form Our Message To Send
+                std::string message = "|cff" + NameColor + "[" + Name + "]|r " + gmBadge + playerLnk + "|r " + teamColor + temp + "|r";
+                // Get All Sessions 
+                SessionMap sessions = sWorld->GetAllSessions();
+                // Iterate through session map.
+                for (SessionMap::iterator itr = sessions.begin(); itr != sessions.end(); ++itr) {
+                    // For each player in session map.
+                    if (Player* receiver = itr->second->GetPlayer()) {
+                        if (!receiver->GetSocial()->HasIgnore(sender->GetGUID()))
+                            sWorld->SendServerMessage(SERVER_MSG_STRING, message.c_str(), receiver);
+                    }
+                }
+            }
+            else if (GetPlayer()->GetGuildId())
             {
                 if (Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
                 {

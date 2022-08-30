@@ -4318,6 +4318,44 @@ Transmogrification.SetCopperCost = 0
 ###################################################################################################
 
 ###################################################################################################
+# OFFICER CHAT TO WORLD CHAT SETTINGS
+#    These settings will let you set all the configs for the world chat.
+#
+# Custom.Chat.Enable 
+#    Description: Turns on and off the world chat. If false officer reverts to blizzlike.
+#    Default: true
+#
+# Custom.Chat.Name 
+#    Description: Sets the name of the chat "[Name][Player]: message..".
+#    Default: Global
+#
+# Colors
+#    Description:  All settings below are hexcode colors just the hexcode nothing extra.
+#
+# Custom.Chat.Color.Name
+#    Default: 33CC00
+#
+# Custom.Chat.Color.Player
+#    Default: ffffff
+#
+# Custom.Chat.Color.Alliance
+#    Default: 49acff
+#
+# Custom.Chat.Color.Horde
+#    Default: f5486f
+#
+
+Custom.Chat.Enable = true
+Custom.Chat.Name = "Global Channel"
+Custom.Chat.Color.Name = "33CC00"
+Custom.Chat.Color.Player = "ffffff"
+Custom.Chat.Color.Alliance = "49acff"
+Custom.Chat.Color.Horde = "f5486f"
+
+#
+###################################################################################################
+
+###################################################################################################
 # MISC ANTI-CHEAT SETTINGS
 #
 # Settings to tweak various anti cheat measures.

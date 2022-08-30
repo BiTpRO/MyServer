@@ -178,6 +178,7 @@ enum WorldBoolConfigs
     CONFIG_RESPAWN_DYNAMIC_ESCORTNPC,
     CONFIG_REGEN_HP_CANNOT_REACH_TARGET_IN_RAID,
     CONFIG_ALLOW_LOGGING_IP_ADDRESSES_IN_DATABASE,
+    CONFIG_CUSTOM_CHAT_ENABLE,
     BOOL_CONFIG_VALUE_COUNT
 };
 
@@ -768,6 +769,11 @@ class TC_GAME_API World
         void RemoveOldCorpses();
         void TriggerGuidWarning();
         void TriggerGuidAlert();
+        std::string GetCustomChatName();
+        std::string GetCustomChatNameColor();
+        std::string GetCustomChatPlayerColor();
+        std::string GetCustomChatAllianceColor();
+        std::string GetCustomChatHordeColor();
         bool IsGuidWarning() { return _guidWarn; }
         bool IsGuidAlert() { return _guidAlert; }
 
@@ -829,6 +835,11 @@ class TC_GAME_API World
         void DetectDBCLang();
         bool m_allowMovement;
         std::string m_dataPath;
+        std::string m_chatName;
+        std::string m_chatNameColor;
+        std::string m_chatPlayerColor;
+        std::string m_chatAllianceColor;
+        std::string m_chatHordeColor;
 
         // for max speed access
         static float m_MaxVisibleDistanceOnContinents;

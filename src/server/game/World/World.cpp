@@ -258,6 +258,12 @@ void World::TriggerGuidAlert()
     _guidWarn = false;
 }
 
+std::string World::GetCustomChatName() { return World::m_chatName; }
+std::string World::GetCustomChatNameColor() { return World::m_chatNameColor; }
+std::string World::GetCustomChatPlayerColor() { return World::m_chatPlayerColor; }
+std::string World::GetCustomChatAllianceColor() { return World::m_chatAllianceColor; }
+std::string World::GetCustomChatHordeColor() { return World::m_chatHordeColor; }
+
 void World::DoGuidWarningRestart()
 {
     if (m_ShutdownTimer)
@@ -493,6 +499,12 @@ void World::LoadConfigSettings(bool reload)
     ///- Read the player limit and the Message of the day from the config file
     SetPlayerAmountLimit(sConfigMgr->GetIntDefault("PlayerLimit", 100));
     Motd::SetMotd(sConfigMgr->GetStringDefault("Motd", "Welcome to a Trinity Core Server."));
+
+    m_chatName = sConfigMgr->GetStringDefault("Custom.Chat.Name", "Global");
+    m_chatNameColor = sConfigMgr->GetStringDefault("Custom.Chat.Color.Name", "33CC00");
+    m_chatPlayerColor = sConfigMgr->GetStringDefault("Custom.Chat.Color.Player", "49acff");
+    m_chatAllianceColor = sConfigMgr->GetStringDefault("Custom.Chat.Color.Alliance", "49acff");
+    m_chatHordeColor = sConfigMgr->GetStringDefault("Custom.Chat.Color.Horde", "f5486f");
 
     ///- Read ticket system setting from the config file
     m_bool_configs[CONFIG_ALLOW_TICKETS] = sConfigMgr->GetBoolDefault("AllowTickets", true);
@@ -1547,6 +1559,9 @@ void World::LoadConfigSettings(bool reload)
 
     // Specifies if IP addresses can be logged to the database
     m_bool_configs[CONFIG_ALLOW_LOGGING_IP_ADDRESSES_IN_DATABASE] = sConfigMgr->GetBoolDefault("AllowLoggingIPAddressesInDatabase", true, true);
+
+    // Specifies if officer chat will be changed into world chat or not.
+    m_bool_configs[CONFIG_CUSTOM_CHAT_ENABLE] = sConfigMgr->GetBoolDefault("Custom.Chat.Enable", true);
 
     // call ScriptMgr if we're reloading the configuration
     if (reload)
